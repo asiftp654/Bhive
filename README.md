@@ -71,8 +71,57 @@ Bhive/
 ## 🛠️ Installation & Setup
 
 ### Prerequisites
-- Python 3.10+
 - Docker & Docker Compose
+
+### Docker & Docker Compose Setup
+
+#### Installation Guide
+
+**For Windows & macOS:**
+- Download and install [Docker Desktop](https://docs.docker.com/get-started/get-docker/)
+- Docker Compose is included with Docker Desktop
+- After installation, verify with:
+  ```bash
+  docker --version
+  docker compose version
+  ```
+
+**For Linux (Ubuntu/Debian):**
+```bash
+# Quick installation script
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+
+# Install Docker Compose
+sudo apt-get update
+sudo apt-get install docker-compose-plugin
+
+# Add user to docker group (optional, to avoid using sudo)
+sudo usermod -aG docker $USER
+newgrp docker
+
+# Verify installation
+docker --version
+docker compose version
+```
+
+**For other Linux distributions:**
+- Follow the [official Docker installation guide](https://docs.docker.com/engine/install/) for your specific distribution
+- Install Docker Compose using the [official instructions](https://docs.docker.com/compose/install/)
+
+#### Post-Installation Setup
+```bash
+# Test Docker installation
+docker run hello-world
+
+# Test Docker Compose
+docker compose --help
+```
+
+#### Troubleshooting
+- **Permission denied errors**: Make sure your user is in the docker group or use `sudo`
+- **Docker daemon not running**: Start Docker service with `sudo systemctl start docker` (Linux)
+- **Port conflicts**: Ensure ports 8000, 5434, and 6380 are available
 
 ### Environment Variables
 Create a `.env` file in the project root
@@ -87,20 +136,13 @@ Paste the env variables that were sent in the email.
    cd Bhive
    ```
 
-2. **Create environment file**
-   ```bash
-   # Create .env file
-   nano .env
-   # Copy and paste the env variables that were sent in the email
-   ```
-
-3. **Start all services**
+2. **Start all services**
    ```bash
    docker-compose build
    docker-compose up -d
    ```
 
-4. **Verify the setup**
+3. **Verify the setup**
    ```bash
    # Check if all containers are running
    docker-compose ps
