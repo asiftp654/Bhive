@@ -1,4 +1,4 @@
-# 🐝 Bhive - Mutual Fund Broker Application
+#  Bhive - Mutual Fund Broker Application
 
 A comprehensive FastAPI-based mutual fund investment platform that allows users to discover, invest in, and track their mutual fund portfolios
 
@@ -68,7 +68,7 @@ Bhive/
 - Docker & Docker Compose
 
 ### Environment Variables
-Create a `.env` file in the project root:
+Create a `.env` file in the project root
 Paste the env variables that were sent in the email.
 
 ### Quick Start with Docker
@@ -133,33 +133,6 @@ The application includes a Celery-powered background task system that:
 - **Runs Hourly**: Scheduled to run every hour (3600 seconds) - configurable
 - **Error Handling**: Automatic retries with exponential backoff
 
-
-## 🗄️ Database Schema
-
-### Users Table
-```sql
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    email VARCHAR UNIQUE NOT NULL,
-    password VARCHAR NOT NULL,
-    is_verified BOOLEAN DEFAULT FALSE
-);
-```
-
-### Investments Table
-```sql
-CREATE TABLE investments (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
-    scheme_code INTEGER,
-    scheme_name VARCHAR,
-    units INTEGER,
-    buy_price NUMERIC(10,4),
-    current_price NUMERIC(10,4),
-    transaction_date DATE DEFAULT CURRENT_DATE,
-    mutual_fund_family VARCHAR
-);
-```
 
 ## 🔧 Configuration
 
