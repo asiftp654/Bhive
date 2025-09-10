@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: bhive_postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PGPORT: 5434
+    ports:
+      - "${DB_PORT}:5434"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - bhive_network
+    command: postgres -p 5434
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: bhive_redis
+    ports:
+      - "${REDIS_PORT}:6380"
+    volumes:
+      - redis_data:/data
+    networks:
+      - bhive_network
+    command: redis-server --port 6380
+
+  # FastAPI Application
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bhive_web
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - bhive_network
+    volumes:
+      - .:/app
+    command: sh -c "/entrypoint.sh && uvicorn main:app --host 0.0.0.0 --port 8000"
+
+  # Celery Worker
+  celery_worker:
+    build: .
+    container_name: bhive_celery_worker
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - bhive_network
+    volumes:
+      - .:/app
+    command: celery -A celery_app worker --loglevel=info
+
+  # Celery Beat (Scheduler)
+  celery_beat:
+    build: .
+    container_name: bhive_celery_beat
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - bhive_network
+    volumes:
+      - .:/app
+    command: celery -A celery_app beat --loglevel=info --schedule=/tmp/celerybeat-schedule
+
+networks:
+  bhive_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
