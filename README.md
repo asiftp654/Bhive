@@ -102,6 +102,30 @@ Paste the env variables that were sent in the email.
 The application will be available at: `http://localhost:8000`
 
 
+## 🔌 RapidAPI Integration
+
+The application integrates with [Latest Mutual Fund NAV API](https://rapidapi.com/suneetk92/api/latest-mutual-fund-nav).
+
+A test account has been set up for you.
+
+If you prefer to use your own key:
+
+1. Log in to [RapidAPI](https://rapidapi.com/).
+2. Search for latest-mutual-fund-nav by suneet92
+2. Select the latest version of the API in the sidebar.
+3. Copy the X-RapidAPI-Key.
+4. Paste it into the `.env` file as the value for:
+   ```
+   MUTUAL_FUND_API_KEY=your_rapidapi_key_here
+   ```
+
+## 📧 Email Integration
+
+A sample email account has been created for sending OTPs during authentication.
+
+Update the SMTP settings in the `.env` file if you want to use your own email provider.
+
+
 ## 📚 API Documentation
 
 ### Interactive API Documentation
