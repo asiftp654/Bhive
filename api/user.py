@@ -3,14 +3,15 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from database import get_db
 from crud.user import UserCrud
-from schemas.user import UserCreate, UserCreateResponse, VerifyOtp, UserVerifyResponse, UserLogin
+from schemas.user import UserCreate, UserCreateResponse, VerifyOtp, UserVerifyResponse, UserLogin, ErrorResponse
 from api.utils import (verify_password, generate_otp, verify_otp, send_otp,
                        create_access_token)
 
 router = APIRouter(prefix="/users", tags=["users"])
 
 
-@router.post("/signup", status_code=status.HTTP_201_CREATED, response_model=UserCreateResponse)
+@router.post("/signup", status_code=status.HTTP_201_CREATED, response_model=UserCreateResponse, 
+            responses={400: {"model": ErrorResponse}, 422: {"model": ErrorResponse}})
 async def signup(data: UserCreate, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     user_crud = UserCrud(db)    
     existing_user = user_crud.get_user(data.email)
@@ -38,7 +39,8 @@ async def signup(data: UserCreate, background_tasks: BackgroundTasks, db: Sessio
             detail="Email already registered"
         )
 
-@router.post("/verify-otp", status_code=status.HTTP_200_OK, response_model=UserVerifyResponse)
+@router.post("/verify-otp", status_code=status.HTTP_200_OK, response_model=UserVerifyResponse,
+            responses={400: {"model": ErrorResponse}, 422: {"model": ErrorResponse}})
 def validate_otp(data: VerifyOtp, db: Session = Depends(get_db)):
     user_crud = UserCrud(db)
     user = user_crud.get_user(data.email)
@@ -55,37 +57,30 @@ def validate_otp(data: VerifyOtp, db: Session = Depends(get_db)):
     user = user_crud.mark_as_verified(user)
     
     access_token = create_access_token(data={"sub": user.email, "user_id": user.id})
-    return {
-        "message": "OTP verified successfully", 
-        "user": user,
-        "access_token": access_token
-    }
+    return UserVerifyResponse(user=user, access_token=access_token)
 
 
-@router.post("/login", status_code=status.HTTP_200_OK, response_model=UserVerifyResponse)
+@router.post("/login", status_code=status.HTTP_200_OK, response_model=UserVerifyResponse,
+            responses={400: {"model": ErrorResponse}, 422: {"model": ErrorResponse}})
 def login(data: UserLogin, db: Session = Depends(get_db)):
     user = UserCrud(db).get_user(data.email)
     if not user:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid email or password"
         )
     
     if not verify_password(data.password, user.password):
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid email or password"
         )
     
     if not user.is_verified:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail="Please verify your email first"
         )
     
     access_token = create_access_token(data={"sub": user.email, "user_id": user.id})    
-    return UserVerifyResponse(
-        message="Login successful",
-        user=user,
-        access_token=access_token
-    )
+    return UserVerifyResponse(user=user, access_token=access_token)

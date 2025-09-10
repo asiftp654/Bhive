@@ -8,19 +8,21 @@ from api.utils import call_rapidapi
 from crud.investments import InvestmentsCrud
 from fastapi import HTTPException
 from schemas.investments import MutualFundsResponse, InvestmentsRequest, InvestmentsResponse
+from schemas.user import ErrorResponse
 from typing import List
 
-router = APIRouter(prefix="", tags=["investments"])
+router = APIRouter(prefix="/mutual-funds", tags=["investments"])
 
 
-@router.get("/mutual-funds", response_model=List[MutualFundsResponse])
+@router.get("", response_model=List[MutualFundsResponse], responses={401: {"model": ErrorResponse},
+            422: {"model": ErrorResponse}, 429: {"model": ErrorResponse}, 500: {"model": ErrorResponse}})
 def get_mutual_funds_for_fund_family(fund_family: str = Query(...), user: User = Depends(get_current_active_user)):
     querystring = {"Mutual_Fund_Family": fund_family, "Scheme_Type":"Open"}
     response = call_rapidapi(querystring)
     return response
 
 
-@router.get("/mutual-funds/investments")
+@router.get("/investments", responses={401: {"model": ErrorResponse}})
 def get_mutual_funds_investments(user: User = Depends(get_current_active_user), db: Session = Depends(get_db)):
     investments_crud = InvestmentsCrud(db)
     investments = investments_crud.get_investments(user.id)
@@ -48,7 +50,8 @@ def get_mutual_funds_investments(user: User = Depends(get_current_active_user), 
     }
 
 
-@router.post("/mutual-funds/investments", response_model=InvestmentsResponse)
+@router.post("/investments", response_model=InvestmentsResponse, responses={401: {"model": ErrorResponse},
+             422: {"model": ErrorResponse}, 429: {"model": ErrorResponse}, 500: {"model": ErrorResponse}})
 def create_mutual_funds_investments(data: InvestmentsRequest, user: User = Depends(get_current_active_user), 
                                     db: Session = Depends(get_db)):
     querystring = {"Scheme_Code": data.scheme_code}

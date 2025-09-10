@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr, field_validator
+from typing import Union, List
 
 
 class UserCreate(BaseModel):
@@ -32,7 +33,6 @@ class VerifyOtp(BaseModel):
 
 
 class UserVerifyResponse(BaseModel):
-    message: str
     user: UserResponse
     access_token: str
 
@@ -41,3 +41,7 @@ class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
+
+class ErrorResponse(BaseModel):
+    code: int
+    message: Union[str, List[str]]

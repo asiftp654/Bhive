@@ -35,6 +35,7 @@ A comprehensive FastAPI-based mutual fund investment platform that allows users 
 - **Containerization**: Docker & Docker Compose
 - **Database Migrations**: Alembic
 
+
 ### Project Structure
 ```
 Bhive/
@@ -48,6 +49,11 @@ Bhive/
 ├── schemas/              # Pydantic schemas for API
 │   ├── user.py          # User request/response schemas
 │   └── investments.py   # Investment schemas
+├── tests/               # Test files
+│   ├── __init__.py      # Test package initialization
+│   ├── conftest.py      # Test configuration and fixtures
+│   ├── test_auth.py     # Authentication endpoint tests
+│   └── test_investments.py # Investment endpoint tests
 ├── crud/                # Database operations
 │   ├── user.py         # User CRUD operations
 │   └── investments.py  # Investment CRUD operations
@@ -61,6 +67,7 @@ Bhive/
 └── docker-compose.yml  # Multi-container setup
 ```
 
+
 ## 🛠️ Installation & Setup
 
 ### Prerequisites
@@ -70,6 +77,7 @@ Bhive/
 ### Environment Variables
 Create a `.env` file in the project root
 Paste the env variables that were sent in the email.
+
 
 ### Quick Start with Docker
 
@@ -87,6 +95,7 @@ Paste the env variables that were sent in the email.
 
 3. **Start all services**
    ```bash
+   docker-compose build
    docker-compose up -d
    ```
 
@@ -130,6 +139,18 @@ Update the SMTP settings in the `.env` file if you want to use your own email pr
 
 ### Interactive API Documentation
 - **Swagger UI**: `http://localhost:8000/docs`
+
+
+## 🧪 Testing
+
+The project includes comprehensive test coverage for authentication and investment functionality using pytest and FastAPI's testing framework.
+
+### Running Tests
+
+```bash
+# From the project root directory
+sudo docker-compose run --rm tests
+```
 
 ### Key Endpoints
 

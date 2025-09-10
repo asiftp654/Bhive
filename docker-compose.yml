@@ -47,7 +47,7 @@ services:
       - bhive_network
     volumes:
       - .:/app
-    command: sh -c "/entrypoint.sh && uvicorn main:app --host 0.0.0.0 --port 8000"
+    command: sh -c "/entrypoint.sh && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
 
   # Celery Worker
   celery_worker:
@@ -78,6 +78,21 @@ services:
     volumes:
       - .:/app
     command: celery -A celery_app beat --loglevel=info --schedule=/tmp/celerybeat-schedule
+
+  # Tests
+  tests:
+    build: .
+    container_name: bhive-tests
+    env_file:
+      - .env
+    command: pytest -v -p no:warnings -p no:cacheprovider
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - bhive_network
+    volumes:
+      - .:/app
 
 networks:
   bhive_network:

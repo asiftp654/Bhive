@@ -1,10 +1,10 @@
 import requests
 import jwt
 import random
-import asyncio
 import aiosmtplib
 import requests
 from fastapi import HTTPException, status
+from fastapi.responses import JSONResponse
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 from email.mime.text import MIMEText
@@ -122,7 +122,6 @@ def get_current_user(db, token: str):
     except Exception:
         return None
 
-
 def call_rapidapi(querystring: dict) -> dict:
     try:
         url = settings.mutual_fund_api_url
@@ -144,3 +143,12 @@ def call_rapidapi(querystring: dict) -> dict:
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Error occurred while fetching data"
         )
+
+def format_error_response(status_code: int, message: str):
+    return JSONResponse(
+        status_code=status_code,
+        content={
+            "code": status_code,
+            "message": message
+        }
+    )
