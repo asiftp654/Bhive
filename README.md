@@ -89,8 +89,9 @@ Paste the env variables that were sent in the email.
 
 2. **Create environment file**
    ```bash
+   # Create .env file
    nano .env
-   # Paste all env variables that were sent in the email.
+   # Copy and paste the env variables that were sent in the email
    ```
 
 3. **Start all services**
@@ -140,6 +141,9 @@ Update the SMTP settings in the `.env` file if you want to use your own email pr
 ### Interactive API Documentation
 - **Swagger UI**: `http://localhost:8000/docs`
 
+### Postman API Collection
+Access the comprehensive Postman collection that covers success & failure responses:
+- **Collection Link**: [Bhive API Collection](https://interstellar-station-763625.postman.co/workspace/New-Team-Workspace~0f4365a6-67de-499a-855c-67c6d5830d17/collection/24617918-ed2d8e70-32a3-4420-a51c-e4ffe8b16f2c?action=share&source=copy-link&creator=24617918)
 
 ## 🧪 Testing
 
@@ -147,6 +151,7 @@ The project includes comprehensive test coverage for authentication and investme
 
 ### Running Tests
 
+#### Run All Tests
 ```bash
 # From the project root directory
 sudo docker-compose run --rm tests
