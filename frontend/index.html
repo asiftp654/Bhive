@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bhive MF</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Simple Header -->
+    <header class="simple-header">
+        <div class="header-content">
+            <h1>Bhive MF</h1>
+            <button onclick="logout()" id="logoutBtn" class="logout-btn" style="display: none;">Logout</button>
+        </div>
+    </header>
+
+    <!-- Loading -->
+    <div class="loading" id="loadingSpinner">Loading...</div>
+
+    <!-- Alert -->
+    <div class="alert" id="alertMessage">
+        <span id="alertText"></span>
+        <button onclick="hideAlert()">×</button>
+    </div>
+
+    <!-- Authentication -->
+    <div class="auth-container" id="authSection">
+        <div class="auth-card">
+            <h2 id="authTitle">Bhive MF</h2>
+            
+            <!-- Login Form -->
+            <form id="loginForm">
+                <input type="text" id="loginEmail" placeholder="Email">
+                <input type="password" id="loginPassword" placeholder="Password">
+                <button type="submit">Login</button>
+                <p><a href="#" onclick="showSignupForm()">Sign up</a></p>
+            </form>
+
+            <!-- Signup Form -->
+            <form id="signupForm" style="display: none;">
+                <input type="text" id="signupEmail" placeholder="Email">
+                <input type="password" id="signupPassword" placeholder="Password">
+                <button type="submit">Sign Up</button>
+                <p><a href="#" onclick="showLoginForm()">Login</a></p>
+            </form>
+
+            <!-- OTP Form -->
+            <form id="otpForm" style="display: none;">
+                <h3>Verify Email</h3>
+                <p>Code sent to <span id="otpEmail"></span></p>
+                <input type="text" id="otpCode" placeholder="6-digit code">
+                <button type="submit">Verify</button>
+                <p><a href="#" onclick="showLoginForm()">Back</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div class="main-container" id="mainApp" style="display: none;">
+        
+        <!-- Top Half: Portfolio & Investments -->
+        <section class="portfolio-section">
+            <div class="portfolio-header">
+                <h2>My Portfolio</h2>
+                <button onclick="reloadPortfolio()" class="reload-btn" id="reloadBtn">
+                    Reload Prices
+                </button>
+            </div>
+            
+            <div class="portfolio-stats">
+                <div class="stat-card">
+                    <h3 id="totalInvestments">₹0</h3>
+                    <p>Total Investment</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="portfolioValue">₹0</h3>
+                    <p>Current Value</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalProfitLoss">₹0</h3>
+                    <p>Total P&L</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalFunds">0</h3>
+                    <p>Total Funds</p>
+                </div>
+            </div>
+
+                    <h3>My Investments</h3>
+            <div class="investments-table-wrapper">
+                <table id="investmentsTable" class="investments-table">
+                    <thead>
+                        <tr>
+                            <th>Scheme</th>
+                            <th>Units</th>
+                            <th>Buy Price</th>
+                            <th>Current Price</th>
+                            <th>P&L</th>
+                        </tr>
+                    </thead>
+                    <tbody id="investmentsTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="search-section">
+            <h2>Search & Invest</h2>
+            <div class="search-form">
+                <select id="fundFamilySelect">
+                    <option value="">Choose a fund family...</option>
+                </select>
+                <button onclick="searchMutualFunds()" class="search-btn">Search Funds</button>
+            </div>
+            <div class="search-results" id="searchResults" style="display: none;">
+                <h3>Available Funds</h3>
+                <div class="funds-grid" id="fundsGrid"></div>
+            </div>
+        </section>
+    </div>
+
+    <div class="modal" id="investmentModal">
+        <div class="modal-content">
+            <h3>Invest</h3>
+            <button onclick="closeInvestmentModal()">×</button>
+            <div id="selectedFundDetails"></div>
+            <form id="investmentForm">
+                <input type="text" id="investmentUnits" placeholder="Units">
+                <div class="calc">
+                    <div>NAV: <strong id="navPerUnit">₹0</strong></div>
+                    <div>Total: <strong id="totalInvestmentAmount">₹0</strong></div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeInvestmentModal()">Cancel</button>
+                    <button type="submit">Invest</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="auth.js"></script>
+    <script src="investments.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

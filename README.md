@@ -58,6 +58,14 @@ Bhive/
 │   ├── user.py         # User CRUD operations
 │   └── investments.py  # Investment CRUD operations
 ├── alembic/            # Database migration files
+├── frontend/           # Frontend application
+│   ├── index.html     # Main HTML page
+│   ├── styles.css     # CSS styling
+│   ├── main.js        # Application entry point
+│   ├── auth.js        # Authentication handling
+│   ├── investments.js # Investment management UI
+│   ├── api.js         # API communication layer
+│   └── server.py      # Static file server
 ├── main.py             # FastAPI application entry point
 ├── config.py           # Configuration settings
 ├── database.py         # Database connection setup
@@ -138,20 +146,29 @@ Paste the env variables that were sent in the email.
 
 2. **Start all services**
    ```bash
-   docker-compose build
-   docker-compose up -d
+   sudo docker-compose build
+   sudo docker-compose up -d
    ```
 
 3. **Verify the setup**
    ```bash
    # Check if all containers are running
-   docker-compose ps
+   sudo docker-compose ps
    
    # View application logs
-   docker-compose logs web
+   sudo docker-compose logs web
    ```
 
-The application will be available at: `http://localhost:8000`
+The backend application will be available at: `http://localhost:8000`
+
+
+## 🎨 Frontend
+
+The frontend is a simple one, just created to showcase backend apis. 
+
+It is served at `http://localhost:3000` 
+
+when running with Docker Compose
 
 
 ## 🔌 RapidAPI Integration
@@ -196,7 +213,7 @@ The project includes comprehensive test coverage for authentication and investme
 #### Run All Tests
 ```bash
 # From the project root directory
-sudo docker-compose run --rm tests
+docker-compose run --rm tests
 ```
 
 ### Key Endpoints
@@ -237,5 +254,3 @@ The application includes a Celery-powered background task system that:
 - **API Integration**: RapidAPI configuration for mutual fund data
 - **Celery**: Task scheduling and worker configuration
 
-
-**Built with ❤️ using FastAPI, PostgreSQL, Redis, and Celery**

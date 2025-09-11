@@ -79,6 +79,20 @@ services:
       - .:/app
     command: celery -A celery_app beat --loglevel=info --schedule=/tmp/celerybeat-schedule
 
+  # Frontend (HTML/CSS/JS)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: bhive_frontend
+    ports:
+      - "3000:8080"
+    depends_on:
+      - web
+    networks:
+      - bhive_network
+    restart: unless-stopped
+
   # Tests
   tests:
     build: .
