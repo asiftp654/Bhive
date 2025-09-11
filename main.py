@@ -27,6 +27,7 @@ app.include_router(user_router, prefix="")
 app.include_router(investments_router, prefix="")
 
 
+# Exception handlers for handling common error responses
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
     return format_error_response(exc.status_code, exc.detail)

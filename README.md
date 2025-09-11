@@ -88,7 +88,8 @@ Bhive/
 **For Windows & macOS:**
 - Download and install [Docker Desktop](https://docs.docker.com/get-started/get-docker/)
 - Docker Compose is included with Docker Desktop
-- After installation, verify with:
+- Once installed restart the system a
+- After installation In powershee(In case of Windows) or In Terminal(In case of macOs), verify with:
   ```bash
   docker --version
   docker compose version
@@ -121,15 +122,12 @@ docker compose version
 ```bash
 # Test Docker installation
 docker run hello-world
-
-# Test Docker Compose
-docker compose --help
 ```
 
 #### Troubleshooting
 - **Permission denied errors**: Make sure your user is in the docker group or use `sudo`
 - **Docker daemon not running**: Start Docker service with `sudo systemctl start docker` (Linux)
-- **Port conflicts**: Ensure ports 8000, 5434, and 6380 are available
+- **Port conflicts**: Ensure ports 8000, 5434, 6380, and 3000 are available
 
 ### Environment Variables
 Create a `.env` file in the project root
@@ -181,9 +179,10 @@ If you prefer to use your own key:
 
 1. Log in to [RapidAPI](https://rapidapi.com/).
 2. Search for latest-mutual-fund-nav by suneet92
-2. Select the latest version of the API in the sidebar.
-3. Copy the X-RapidAPI-Key.
-4. Paste it into the `.env` file as the value for:
+3. Select the latest version of the API in the sidebar.
+4. Subscribe to the API for free plan
+5. Copy the X-RapidAPI-Key.
+6. Paste it into the `.env` file as the value for:
    ```
    MUTUAL_FUND_API_KEY=your_rapidapi_key_here
    ```
@@ -202,7 +201,8 @@ Update the SMTP settings in the `.env` file if you want to use your own email pr
 
 ### Postman API Collection
 Access the comprehensive Postman collection that covers success & failure responses:
-- **Collection Link**: [Bhive API Collection](https://interstellar-station-763625.postman.co/workspace/New-Team-Workspace~0f4365a6-67de-499a-855c-67c6d5830d17/collection/24617918-ed2d8e70-32a3-4420-a51c-e4ffe8b16f2c?action=share&source=copy-link&creator=24617918)
+- **Collection Link**: [Bhive API Collection](https://www.postman.com/interstellar-station-763625/workspace/collab/collection/24617918-ed2d8e70-32a3-4420-a51c-e4ffe8b16f2c?action=share&source=copy-link&creator=24617918)
+
 
 ## 🧪 Testing
 
