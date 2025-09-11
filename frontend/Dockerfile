@@ -16,7 +16,7 @@ COPY main.js .
 EXPOSE 8080
 
 # Add labels for better organization
-LABEL maintainer="Bhive MF Team"
+LABEL maintainer="Bhive Mutual Fund Team"
 LABEL description="Frontend for Bhive Mutual Fund Application"
 LABEL version="1.0.0"
 

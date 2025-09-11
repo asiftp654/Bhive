@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Simple HTTP server for serving the Bhive MF frontend.
+Simple HTTP server for serving the Bhive Mutual Fund frontend.
 Usage: python server.py [port]
 Default port: 8080
 """
@@ -40,7 +40,7 @@ def main():
     try:
         with socketserver.TCPServer(("", PORT), Handler) as httpd:
             server_url = f"http://localhost:{PORT}"
-            print(" Bhive MF Frontend Server")
+            print(" Bhive Mutual Fund Frontend Server")
             print(" Make sure the backend is running at http://localhost:8000")
             httpd.serve_forever()
             

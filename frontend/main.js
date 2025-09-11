@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Bhive MF App initialized');
+    console.log('Bhive Mutual Fund App initialized');
     
     // Error handling
     window.addEventListener('unhandledrejection', (event) => {
@@ -47,4 +47,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-console.log('Bhive MF Frontend loaded successfully!');
+console.log('Bhive Mutual Fund Frontend loaded successfully!');
