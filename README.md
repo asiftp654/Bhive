@@ -89,7 +89,7 @@ Bhive/
 - Download and install [Docker Desktop](https://docs.docker.com/get-started/get-docker/)
 - Docker Compose is included with Docker Desktop
 - Once installed restart the system a
-- After installation In powershee(In case of Windows) or In Terminal(In case of macOs), verify with:
+- After installation In powershell or git bash(In case of Windows) or In Terminal(In case of macOs), verify with:
   ```bash
   docker --version
   docker compose version
