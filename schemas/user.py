@@ -2,8 +2,16 @@ from pydantic import BaseModel, EmailStr, field_validator
 from typing import Union, List
 
 
-class UserCreate(BaseModel):
+class BaseEmailModel(BaseModel):
     email: EmailStr
+    
+    @field_validator('email')
+    @classmethod
+    def normalize_email(cls, v):
+        return v.lower()
+
+
+class UserCreate(BaseEmailModel):
     password: str
     
     @field_validator('password')
@@ -27,8 +35,7 @@ class UserCreateResponse(BaseModel):
     user: UserResponse
 
 
-class VerifyOtp(BaseModel):
-    email: EmailStr
+class VerifyOtp(BaseEmailModel):
     otp: int
 
 
@@ -37,8 +44,7 @@ class UserVerifyResponse(BaseModel):
     access_token: str
 
 
-class UserLogin(BaseModel):
-    email: EmailStr
+class UserLogin(BaseEmailModel):
     password: str
 
 
