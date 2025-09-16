@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import date
 
 
@@ -11,7 +11,7 @@ class MutualFundsResponse(BaseModel):
 
 class InvestmentsRequest(BaseModel):
     scheme_code: int
-    units: int
+    units: int = Field(gt=0)
 
 class InvestmentsResponse(BaseModel):
     scheme_code: int
