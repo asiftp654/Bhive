@@ -1,12 +1,11 @@
-from fastapi import APIRouter, Depends, Query
-from database import get_db
+from fastapi import APIRouter, Depends, Query, HTTPException
+from database import get_async_db
 from datetime import datetime, timezone
 from auth import get_current_active_user
 from models.user import User
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from api.utils import call_rapidapi
-from crud.investments import InvestmentsCrud
-from fastapi import HTTPException
+from crud.investments import AsyncInvestmentsCrud
 from schemas.investments import MutualFundsResponse, InvestmentsRequest, InvestmentsResponse
 from schemas.user import ErrorResponse
 from typing import List
@@ -16,16 +15,16 @@ router = APIRouter(prefix="/mutual-funds", tags=["investments"])
 
 @router.get("", response_model=List[MutualFundsResponse], responses={401: {"model": ErrorResponse},
             422: {"model": ErrorResponse}, 429: {"model": ErrorResponse}, 500: {"model": ErrorResponse}})
-def get_mutual_funds_for_fund_family(fund_family: str = Query(...), user: User = Depends(get_current_active_user)):
+async def get_mutual_funds_for_fund_family(fund_family: str = Query(...), user: User = Depends(get_current_active_user)):
     querystring = {"Mutual_Fund_Family": fund_family, "Scheme_Type":"Open"}
-    response = call_rapidapi(querystring)
+    response = await call_rapidapi(querystring)
     return response
 
 
 @router.get("/investments", responses={401: {"model": ErrorResponse}})
-def get_mutual_funds_investments(user: User = Depends(get_current_active_user), db: Session = Depends(get_db)):
-    investments_crud = InvestmentsCrud(db)
-    investments = investments_crud.get_investments(user.id)
+async def get_mutual_funds_investments(user: User = Depends(get_current_active_user), db: AsyncSession = Depends(get_async_db)):
+    investments_crud = AsyncInvestmentsCrud(db)
+    investments = await investments_crud.get_investments(user.id)
     investments_response = []
     total_profit_loss = 0
     for investment in investments:
@@ -52,10 +51,10 @@ def get_mutual_funds_investments(user: User = Depends(get_current_active_user), 
 
 @router.post("/investments", response_model=InvestmentsResponse, responses={401: {"model": ErrorResponse},
              422: {"model": ErrorResponse}, 429: {"model": ErrorResponse}, 500: {"model": ErrorResponse}})
-def create_mutual_funds_investments(data: InvestmentsRequest, user: User = Depends(get_current_active_user), 
-                                    db: Session = Depends(get_db)):
+async def create_mutual_funds_investments(data: InvestmentsRequest, user: User = Depends(get_current_active_user), 
+                                    db: AsyncSession = Depends(get_async_db)):
     querystring = {"Scheme_Code": data.scheme_code}
-    mutual_fund = call_rapidapi(querystring)
+    mutual_fund = await call_rapidapi(querystring)
     if not mutual_fund:
         raise HTTPException(status_code=404, detail="Mutual fund not found")
         
@@ -69,6 +68,6 @@ def create_mutual_funds_investments(data: InvestmentsRequest, user: User = Depen
         "current_price": mutual_fund["Net_Asset_Value"],
         "mutual_fund_family": mutual_fund["Mutual_Fund_Family"],
     }
-    investments_crud = InvestmentsCrud(db)
-    investment = investments_crud.create_investment(investment)
+    investments_crud = AsyncInvestmentsCrud(db)
+    investment = await investments_crud.create_investment(investment)
     return investment

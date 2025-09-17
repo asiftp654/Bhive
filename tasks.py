@@ -2,7 +2,7 @@ from celery_app import celery
 from database import SessionLocal
 from models.investments import Investments
 from crud.investments import InvestmentsCrud
-from api.utils import call_rapidapi
+from api.utils import call_rapidapi_sync
 from sqlalchemy import update, case
 
 
@@ -17,7 +17,7 @@ def update_latest_prices(self):
 
         scheme_codes = ",".join(str(code[0]) for code in scheme_codes if code and code[0] is not None)
         querystring = {"Scheme_Code": scheme_codes}
-        response = call_rapidapi(querystring)
+        response = call_rapidapi_sync(querystring)
         latest_prices = {
             mutual_fund["Scheme_Code"]: mutual_fund["Net_Asset_Value"]
             for mutual_fund in response

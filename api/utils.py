@@ -3,6 +3,7 @@ import jwt
 import random
 import aiosmtplib
 import requests
+import httpx
 from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
 from datetime import datetime, timedelta, timezone
@@ -122,7 +123,8 @@ def get_current_user(db, token: str):
     except Exception:
         return None
 
-def call_rapidapi(querystring: dict) -> dict:
+def call_rapidapi_sync(querystring: dict) -> dict:
+    """Synchronous version of call_rapidapi for Celery tasks."""
     try:
         url = settings.mutual_fund_api_url
         headers = {
@@ -137,6 +139,30 @@ def call_rapidapi(querystring: dict) -> dict:
             )
         response.raise_for_status()
         return response.json()
+    except Exception as e:
+        print(f"Error calling RapidAPI: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error occurred while fetching data"
+        )
+
+
+async def call_rapidapi(querystring: dict) -> dict:
+    try:
+        url = settings.mutual_fund_api_url
+        headers = {
+            "x-rapidapi-key": settings.mutual_fund_api_key,
+            "x-rapidapi-host": settings.mutual_fund_api_host
+        }
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url, headers=headers, params=querystring)
+            if response.status_code == 429:
+                raise HTTPException(
+                    status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                    detail="Monthly API quota exceeded. Please use different API key."
+                )
+            response.raise_for_status()
+            return response.json()
     except Exception as e:
         print(f"Error calling RapidAPI: {str(e)}")
         raise HTTPException(
