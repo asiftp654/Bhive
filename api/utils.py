@@ -42,7 +42,7 @@ def verify_otp(user_email: str, otp: int) -> bool:
     return False
 
 async def send_otp(email: str, otp: str) -> bool:
-    subject = f"Your OTP Code [{otp}] - MF Brokers"
+    subject = f"Your OTP Code [{otp}] - Mutual Fund Brokers"
     text_content = f"""
     Hello,
 
@@ -52,7 +52,7 @@ async def send_otp(email: str, otp: str) -> bool:
 
     Do not share this code with anyone.
 
-    - MF Brokers Team
+    - Mutual Fund Brokers Team
     """
     
     try:
